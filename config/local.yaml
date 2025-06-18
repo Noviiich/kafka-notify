@@ -1,0 +1,8 @@
+env: "local"
+storage_path: "./storage/storage.db"
+http-server:
+  address: "localhost:8080" 
+kafka:
+  brokers:
+    - "localhost:9092" #массив брокеров
+  topic: notifications
