@@ -29,14 +29,14 @@ func New(userRepo UserRepository, producer Producer) *NotificationService {
 	}
 }
 
-func (s *NotificationService) SendNotification(FromID int, ToID int, Message string) (string, error) {
+func (s *NotificationService) SendNotification(fromID int, toID int, message string) (string, error) {
 	// Валидация пользователей
-	fromUser, err := s.UserRepository.User(FromID)
+	fromUser, err := s.UserRepository.User(fromID)
 	if err != nil {
 		return "", storage.ErrUserNotFound
 	}
 
-	toUser, err := s.UserRepository.User(ToID)
+	toUser, err := s.UserRepository.User(toID)
 	if err != nil {
 		return "", storage.ErrUserNotFound
 	}
@@ -46,7 +46,7 @@ func (s *NotificationService) SendNotification(FromID int, ToID int, Message str
 		ID:        uuid.New().String(),
 		From:      fromUser,
 		To:        toUser,
-		Message:   Message,
+		Message:   message,
 		Timestamp: time.Now(),
 	}
 
