@@ -71,7 +71,7 @@ func main() {
 	router.Use(mwLogger.New(log))    // внутренний логгер
 	router.Use(middleware.Recoverer) // Если где-то внутри сервера (обработчика запроса) произойдет паника, приложение не должно упасть
 	router.Use(middleware.URLFormat) // Парсер URLов поступающих запросов
-	router.Get("/{userID}", process.New(log, storage))
+	router.Get("/notifications/{userID}", process.New(log, storage))
 
 	// Graceful shutdown
 	done := make(chan os.Signal, 1)
