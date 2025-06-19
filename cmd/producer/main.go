@@ -64,14 +64,14 @@ func main() {
 	router.Use(middleware.URLFormat) // Парсер URLов поступающих запросов
 
 	router.Post("/send", send.New(log, sendNotificationService))
-	log.Info("starting server", slog.String("address", cfg.Address))
+	log.Info("starting server", slog.String("address", cfg.Producer.Address))
 
 	// Graceful shutdown
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, syscall.SIGINT, syscall.SIGTERM)
 
 	srv := http.Server{
-		Addr:    cfg.Address,
+		Addr:    cfg.Producer.Address,
 		Handler: router,
 	}
 

@@ -17,19 +17,19 @@ type UserRepository interface {
 	User(id int) (models.User, error)
 }
 
-type NotificationService struct {
+type NotificationSenderService struct {
 	UserRepository
 	Producer
 }
 
-func New(userRepo UserRepository, producer Producer) *NotificationService {
-	return &NotificationService{
+func New(userRepo UserRepository, producer Producer) *NotificationSenderService {
+	return &NotificationSenderService{
 		UserRepository: userRepo,
 		Producer:       producer,
 	}
 }
 
-func (s *NotificationService) SendNotification(fromID int, toID int, message string) (string, error) {
+func (s *NotificationSenderService) SendNotification(fromID int, toID int, message string) (string, error) {
 	// Валидация пользователей
 	fromUser, err := s.UserRepository.User(fromID)
 	if err != nil {
