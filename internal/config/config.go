@@ -18,17 +18,29 @@ func init() {
 type Config struct {
 	Env         string `yaml:"env" env-default:"local"`
 	StoragePath string `yaml:"storage_path" env-required:"true"`
-	HTTPServer  `yaml:"http_server"`
-	KafkaConfig `yaml:"kafka"`
+	// Server      Server      `yaml:"server:"`
+	KafkaConfig KafkaConfig `yaml:"kafka"`
+	Producer    `yaml:"producer"`
+	Consumer    `yaml:"consumer"`
 }
 
-type HTTPServer struct {
+// type Server struct {
+// 	Producer Producer `yaml:"producer"`
+// 	Consumer Consumer `yaml:"consumer"`
+// }
+
+type KafkaConfig struct {
+	Brokers       []string `yaml:"brokers"`
+	Topic         string   `yaml:"topic"`
+	ConsumerGroup string   `yaml:"consumer_group"`
+}
+
+type Producer struct {
 	Address string `yaml:"address"`
 }
 
-type KafkaConfig struct {
-	Brokers []string `yaml:"brokers"`
-	Topic   string   `yaml:"topic"`
+type Consumer struct {
+	Address string `yaml:"address"`
 }
 
 func MustLoad() *Config {

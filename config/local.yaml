@@ -1,8 +1,11 @@
 env: "local"
 storage_path: "./storage/storage.db"
-http-server:
-  address: "localhost:8080" 
+producer:
+  address: "localhost:8085" #адрес продюсера
+consumer:
+  address: "localhost:8086" #адрес консюмера
 kafka:
   brokers:
     - "localhost:9092" #массив брокеров
   topic: notifications
+  consumer_group: "notifications_group"
