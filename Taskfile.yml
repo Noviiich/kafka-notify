@@ -8,15 +8,11 @@ tasks:
     desc: "Run database migrations"
     cmds:
       - go run ./cmd/migrator --storage-path=./storage/storage.db --migrations-path=./migrations
-  start: ##команда
-    desc: "Run project"
-    cmds:
-    - go run ./cmd/url-shortener
   consumer:
     desc: "Run consumer"
     cmds:
-    - go run ./cmd/consumer 
+    - go run ./cmd/consumer --config=config/local.yaml
   producer:
     desc: "Run producer"
     cmds:
-    - go run ./cmd/producer
+    - go run ./cmd/producer --config=config/local.yaml

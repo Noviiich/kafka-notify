@@ -1,33 +1,19 @@
 package config
 
 import (
-	"log"
+	"flag"
 	"os"
 
 	"github.com/ilyakaznacheev/cleanenv"
-	"github.com/joho/godotenv"
 )
 
-func init() {
-	err := godotenv.Load("C:/Users/nowik/VSCode/Go/kafka-notify/.env")
-	if err != nil {
-		log.Print("Error loading .env file: ", err)
-	}
-}
-
 type Config struct {
-	Env         string `yaml:"env" env-default:"local"`
-	StoragePath string `yaml:"storage_path" env-required:"true"`
-	// Server      Server      `yaml:"server:"`
+	Env         string      `yaml:"env" env-default:"local"`
+	StoragePath string      `yaml:"storage_path" env-required:"true"`
 	KafkaConfig KafkaConfig `yaml:"kafka"`
 	Producer    `yaml:"producer"`
 	Consumer    `yaml:"consumer"`
 }
-
-// type Server struct {
-// 	Producer Producer `yaml:"producer"`
-// 	Consumer Consumer `yaml:"consumer"`
-// }
 
 type KafkaConfig struct {
 	Brokers       []string `yaml:"brokers"`
@@ -44,21 +30,38 @@ type Consumer struct {
 }
 
 func MustLoad() *Config {
-	configPath := os.Getenv("CONFIG_PATH")
+	configPath := fetchConfigPath()
 	if configPath == "" {
-		log.Fatal("CONFIG_PATH is not set")
+		panic("config path is empty")
 	}
 
+	return MustLoadPath(configPath)
+}
+
+func MustLoadPath(configPath string) *Config {
 	// check if file exists
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
-		log.Fatalf("config file does not exist: %s", configPath)
+		panic("config file does not exist: " + configPath)
 	}
 
 	var cfg Config
 
 	if err := cleanenv.ReadConfig(configPath, &cfg); err != nil {
-		log.Fatalf("cannot read config: %s", err)
+		panic("cannot read config: " + err.Error())
 	}
 
 	return &cfg
+}
+
+func fetchConfigPath() string {
+	var res string
+
+	flag.StringVar(&res, "config", "", "path to config file")
+	flag.Parse()
+
+	if res == "" {
+		res = os.Getenv("CONFIG_PATH")
+	}
+
+	return res
 }
